@@ -2,6 +2,11 @@ import {IImport, ImportType, NamedMember} from "import-sort-parser"; // tslint:d
 import * as typescript from "typescript";
 
 export function parseImports(code: string): IImport[] {
+  // Skip this file if it contains an import-sort-ignore comment
+  if (/(\/\/|\/\*\*?)\s*import-sort-ignore/.test(code)) {
+    return [];
+  }
+
   const host: typescript.CompilerHost = {
     fileExists: () => true,
     readFile: () => "",
